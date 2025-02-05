@@ -57,13 +57,7 @@ async def ask_question(question: Dict[str, str]):
         result = []
 
         if res is not None:
-            result.append(vn.create_text_message(res[0]))
-            if len(res) > 1 and res[1] is not None:
-                result.append(vn.create_text_message(res[1].to_markdown()))
-            if len(res) > 2 and res[2] is not None:
-                result.append(
-                    vn.create_blob_message(blob=res[2].to_image(format="svg"), meta={"mime_type": "image/svg+xml"})
-                )
+            result.append(res[0])            
                 
         return {"response": result}
     except Exception as e:
