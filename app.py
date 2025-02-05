@@ -52,14 +52,7 @@ async def ask_question(question: Dict[str, str]):
         res = vn.ask(
             question["query"], print_results=False, auto_train=True, visualize=False, allow_llm_to_see_data=False
         )
-
-
-        result = []
-
-        if res is not None:
-            result.append(res[0])            
-                
-        return {"response": result}
+        return {"response": res}
     except Exception as e:
         return {"error": str(e)}
 
