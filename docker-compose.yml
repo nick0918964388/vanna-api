@@ -8,6 +8,8 @@ services:
       - "8002:8002"
     environment:
       - OLLAMA_HOST=http://ollama.webtw.xyz:11434
+    volumes:
+      - ./chromadb:/data/chromadb
     networks:
       - vanna-network
     restart: unless-stopped

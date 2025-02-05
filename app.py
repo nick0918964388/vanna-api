@@ -16,7 +16,8 @@ class MyVanna(ChromaDB_VectorStore, Ollama):
 # 初始化 MyVanna
 vn = MyVanna(config={
     'model': 'mistral-small:latest',
-    'ollama_host': "http://ollama.webtw.xyz:11434"
+    'ollama_host': "http://ollama.webtw.xyz:11434",
+    'path': '/data/chromadb'
 })
 
 # 連接到 SQLite 資料庫
