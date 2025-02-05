@@ -48,8 +48,24 @@ async def root():
 @app.post("/ask")
 async def ask_question(question: Dict[str, str]):
     try:
-        response = vn.ask(question["query"])
-        return {"response": response}
+        # response = vn.ask(question["query"])
+        res = vn.ask(
+            question["query"], print_results=False, auto_train=True, visualize=False, allow_llm_to_see_data=False
+        )
+
+
+        result = []
+
+        if res is not None:
+            result.append(vn.create_text_message(res[0]))
+            if len(res) > 1 and res[1] is not None:
+                result.append(vn.create_text_message(res[1].to_markdown()))
+            if len(res) > 2 and res[2] is not None:
+                result.append(
+                    vn.create_blob_message(blob=res[2].to_image(format="svg"), meta={"mime_type": "image/svg+xml"})
+                )
+                
+        return {"response": result}
     except Exception as e:
         return {"error": str(e)}
 
