@@ -1,9 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 from vanna.ollama import Ollama
 from vanna.chromadb import ChromaDB_VectorStore
 import psycopg2
 import pandas as pd
-from typing import Dict
+from typing import Dict, Optional
 
 # 建立 FastAPI 應用
 app = FastAPI(title="Vanna API", description="AI 資料庫查詢 API")
@@ -50,6 +50,40 @@ async def ask_question(question: Dict[str, str]):
     try:
         response = vn.ask(question["query"])
         return {"response": response}
+    except Exception as e:
+        return {"error": str(e)}
+
+@app.post("/train")
+async def train_model(
+    ddl: Optional[str] = Body(None),
+    sql: Optional[str] = Body(None),
+    question: Optional[str] = Body(None),
+    memos: Optional[str] = Body(None)
+):
+    try:
+        response = {}
+        
+        if ddl:
+            vn.train(ddl=ddl)
+            response["ddl"] = "DDL 訓練完成"
+
+        if sql:
+            if question:
+                vn.train(question=question, sql=sql)
+                response["sql_with_question"] = "SQL 和問題配對訓練完成"
+            else:
+                vn.train(sql=sql)
+                response["sql"] = "SQL 訓練完成"
+                
+        if memos:
+            vn.train(documentation=memos)
+            response["memos"] = "文件訓練完成"
+            
+        if not response:
+            return {"message": "沒有提供訓練資料"}
+            
+        return {"message": "訓練成功", "details": response}
+        
     except Exception as e:
         return {"error": str(e)}
 
