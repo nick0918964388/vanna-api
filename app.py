@@ -49,28 +49,29 @@ async def root():
 @app.post("/ask")
 async def ask_question(question: Dict[str, str]):
     try:
-        # response = vn.ask(question["query"])
         res = vn.ask(
             question["query"], print_results=True, auto_train=True, visualize=False, allow_llm_to_see_data=False
         )
-        # response = []
-        # if res is not None:
-        #     response.append(res[0])
-        #     if len(res) > 1 and res[1] is not None:
-        #         response.append(res[1])
-        print('res',res)
-        # 將結果轉換為純文字格式
+        
+        # 處理回應
         if isinstance(res, (list, tuple)):
-            text_response = []
-            for item in res:
-                if isinstance(item, pd.DataFrame):
-                    text_response.append(item.to_string())
+            response = {
+                "sql": res[0],  # SQL 查詢
+                "result": None  # 查詢結果
+            }
+            
+            # 如果有查詢結果（DataFrame）
+            if len(res) > 1 and res[1] is not None:
+                if isinstance(res[1], pd.DataFrame):
+                    # 將 DataFrame 轉換為 markdown 格式
+                    response["result"] = res[1].to_markdown(index=False)
                 else:
-                    text_response.append(str(item))
-            res = "\n".join(text_response)
+                    response["result"] = str(res[1])
+                    
+            return response
         else:
-            res = str(res)
-        return res
+            return {"sql": str(res), "result": None}
+            
     except Exception as e:
         return {"error": str(e)}
 
