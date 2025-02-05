@@ -50,7 +50,7 @@ async def ask_question(question: Dict[str, str]):
     try:
         # response = vn.ask(question["query"])
         res = vn.ask(
-            question["query"], print_results=False, auto_train=True, visualize=False, allow_llm_to_see_data=False
+            question["query"], print_results=True, auto_train=True, visualize=False, allow_llm_to_see_data=False
         )
         return {"response": res}
     except Exception as e:
