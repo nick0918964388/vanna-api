@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  vanna-api:
+    build: .
+    container_name: vanna-api
+    ports:
+      - "8002:8002"
+    environment:
+      - OLLAMA_HOST=http://ollama.webtw.xyz:11434
+    networks:
+      - vanna-network
+    restart: unless-stopped
+
+networks:
+  vanna-network:
+    driver: bridge 
