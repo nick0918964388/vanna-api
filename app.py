@@ -4,6 +4,7 @@ from vanna.chromadb import ChromaDB_VectorStore
 import psycopg2
 import pandas as pd
 from typing import Dict, Optional
+import numpy as np
 
 # 建立 FastAPI 應用
 app = FastAPI(title="Vanna API", description="AI 資料庫查詢 API")
@@ -49,16 +50,32 @@ async def root():
 @app.post("/ask")
 async def ask_question(question: Dict[str, str]):
     try:
-        # response = vn.ask(question["query"])
         res = vn.ask(
             question["query"], print_results=True, auto_train=True, visualize=False, allow_llm_to_see_data=False
         )
+        
+        def convert_numpy(obj):
+            if isinstance(obj, np.integer):
+                return int(obj)
+            elif isinstance(obj, np.floating):
+                return float(obj)
+            elif isinstance(obj, np.ndarray):
+                return obj.tolist()
+            elif isinstance(obj, (list, tuple)):
+                return [convert_numpy(item) for item in obj]
+            elif isinstance(obj, dict):
+                return {key: convert_numpy(value) for key, value in obj.items()}
+            return obj
+        
         response = []
         if res is not None:
-            response.append(res[0])
-            if len(res) > 1 and res[1] is not None:
-                response.append(res[1])
-            
+            if isinstance(res, (list, tuple)):
+                for item in res:
+                    if item is not None:
+                        response.append(convert_numpy(item))
+            else:
+                response.append(convert_numpy(res))
+                
         return response
     except Exception as e:
         return {"error": str(e)}
