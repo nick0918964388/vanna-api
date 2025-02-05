@@ -15,7 +15,7 @@ class MyVanna(ChromaDB_VectorStore, Ollama):
 
 # 初始化 MyVanna
 vn = MyVanna(config={
-    'model': 'llama3.2-vision',
+    'model': 'mistral-small:latest',
     'ollama_host': "http://ollama.webtw.xyz:11434"
 })
 
