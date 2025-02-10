@@ -50,7 +50,7 @@ async def root():
 async def ask_question(question: Dict[str, str]):
     try:
         res = vn.ask(
-            question["query"], print_results=True, auto_train=True, visualize=False, allow_llm_to_see_data=True
+            question["query"], print_results=True, auto_train=False, visualize=False, allow_llm_to_see_data=True
         )
         
         # 處理回應
