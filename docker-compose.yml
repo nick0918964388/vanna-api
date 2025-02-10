@@ -6,6 +6,7 @@ services:
     container_name: vanna-api
     ports:
       - "8002:8002"
+      - "8084:8084"
     environment:
       - OLLAMA_HOST=http://ollama.webtw.xyz:11434
     volumes:
