@@ -25,7 +25,7 @@ vn = MyVanna(config={
 
 def run_sql(sql: str) -> pd.DataFrame:
     # 移除可能的 intermediate_sql 前綴
-    sql = sql.replace('intermediate_sql\n\n', '')
+    sql = sql.replace('intermediate_sql', '')
     
     with psycopg2.connect(
         host='10.10.10.168',
