@@ -1,19 +1,18 @@
-version: '3.8'
+version: '3'
 
 services:
-  vanna-api:
+  vanna-app:
     build: .
-    container_name: vanna-api
     ports:
-      - "8002:8002"
-      - "8084:8084"
-    environment:
-      - OLLAMA_HOST=http://ollama.webtw.xyz:11434
+      - "8002:8002"  # app.py 的端口
+      - "8501:8501"  # vanna-web.py 的端口（假設使用這個端口）
     volumes:
+      - ./data:/data
+    environment:
+      - OLLAMA_HOST=http://ollama.mas4dev.xyz:11436
       - ./chromadb:/data/chromadb
     networks:
       - vanna-network
-    restart: unless-stopped
 
 networks:
   vanna-network:
