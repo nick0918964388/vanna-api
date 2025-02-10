@@ -35,5 +35,5 @@ def run_sql(sql: str) -> pd.DataFrame:
 vn.run_sql = run_sql
 vn.run_sql_is_set = True
 
-app = VannaFlaskApp(vn)
+app = VannaFlaskApp(vn,allow_llm_to_see_data=True)
 app.run()
