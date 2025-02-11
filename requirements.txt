@@ -6,3 +6,11 @@ vanna
 httpx
 vanna[chromadb,ollama,postgres]
 tabulate
+unsloth
+huggingface-hub
+python-dotenv
+wandb
+datasets
+transformers
+trl
+torch>=2.0.0
